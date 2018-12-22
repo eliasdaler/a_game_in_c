@@ -1,61 +1,11 @@
-#include "SDL.h"
-#include "SDL_image.h"
+#include "sdl_util.h"
+#include "sprite.h"
+
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include <stdbool.h>
-#include <math.h>
 
-typedef struct vec2f {
-    float x;
-    float y;
-} vec2f;
-
-typedef struct vec2i {
-    int x;
-    int y;
-} vec2i;
-
-typedef struct sprite {
-    vec2f pos;
-    SDL_Texture *texture;
-    SDL_Rect texture_rect;
-} sprite;
-
-vec2i get_sdl_texture_size(SDL_Texture* texture)
-{
-    vec2i result;
-    SDL_QueryTexture(texture, NULL, NULL, &result.x, &result.y);
-    return result;
-}
-
-sprite sprite_new(SDL_Texture *texture)
-{
-    sprite s = { .texture = texture };
-
-    vec2i texture_size = get_sdl_texture_size(texture);
-    s.texture_rect.w = texture_size.x;
-    s.texture_rect.h = texture_size.y;
-
-    return s;
-}
-
-void draw_sprite(SDL_Renderer *renderer, const sprite *sprite)
-{
-    SDL_Rect dest_rect;
-    dest_rect.x = floor(sprite->pos.x);
-    dest_rect.y = floor(sprite->pos.y);
-    dest_rect.w = sprite->texture_rect.w;
-    dest_rect.h = sprite->texture_rect.h;
-
-    SDL_RenderCopy(renderer, sprite->texture, &sprite->texture_rect, &dest_rect);
-}
-
-SDL_Texture *load_texture(SDL_Renderer *renderer, char *path)
-{
-    SDL_Surface *surface = IMG_Load(path);
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-    return texture;
-}
 
 int main(int argc, char *argv[])
 {

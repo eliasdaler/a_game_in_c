@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(a_game_in_c
-  LANGUAGES C)
+  LANGUAGES C
+)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 add_executable(game)
 
 set_property(TARGET game PROPERTY C_STANDARD 99)
-target_compile_options(game PRIVATE -Wall -pedantic)
+set_property(TARGET game PROPERTY C_EXTENSIONS OFF)
+target_compile_options(game PRIVATE -Wall -Wextra -Wformat -Wno-unused-parameter -Wpedantic)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -29,4 +31,6 @@ target_link_libraries(game
 target_sources(game
   PUBLIC
     src/main.c
+    src/sdl_util.c
+    src/sprite.c
 )
