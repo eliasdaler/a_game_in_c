@@ -1,4 +1,4 @@
-a_game_in_c - a simple game in plain C I've made for fun
+a_game_in_c - a simple game in plain C I'm making for fun and education
 
 # Dependencies
 * SDL2
@@ -7,4 +7,5 @@ a_game_in_c - a simple game in plain C I've made for fun
 # License
 
 Code - MIT
+
 Binary resources (images, etc.) - [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
