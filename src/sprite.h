@@ -3,14 +3,15 @@
 #include "vec2.h"
 
 #include <SDL_rect.h>
-#include <SDL_render.h>
+
+struct SDL_Texture;
+struct SDL_Renderer;
 
 typedef struct sprite {
     vec2f pos;
-    SDL_Texture *texture;
-    SDL_Rect texture_rect;
+    struct SDL_Texture *texture;
+    struct SDL_Rect texture_rect;
 } sprite;
 
-sprite sprite_new(SDL_Texture *texture);
-void draw_sprite(SDL_Renderer *renderer, const sprite *sprite);
-SDL_Texture *load_texture(SDL_Renderer *renderer, char *path);
+sprite sprite_new(struct SDL_Texture *texture);
+void sprite_draw(struct SDL_Renderer *renderer, const sprite *sprite);

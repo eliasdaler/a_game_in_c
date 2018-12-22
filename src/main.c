@@ -1,5 +1,6 @@
 #include "sdl_util.h"
 #include "sprite.h"
+#include "tile_map.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -38,24 +39,27 @@ int main(int argc, char *argv[])
     }
 
     SDL_RenderSetScale(renderer, 3.0f, 3.0f);
-    SDL_SetRenderDrawColor(renderer, 180, 165, 106, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
-    SDL_Texture *tree_texture = load_texture(renderer, "tree.png");
-    SDL_Texture *pine_tree_texture = load_texture(renderer, "pine_tree.png");
-    SDL_Texture *cat_texture = load_texture(renderer, "cat.png");
+    SDL_Texture *tree_texture = load_texture(renderer, "res/images/tree.png");
+    SDL_Texture *pine_tree_texture = load_texture(renderer, "res/images/pine_tree.png");
+    SDL_Texture *cat_texture = load_texture(renderer, "res/images/cat.png");
 
     sprite tree_sprite = sprite_new(tree_texture);
     tree_sprite.pos.x = 32.f;
     tree_sprite.pos.y = 64.f;
 
     sprite pine_tree_sprite = sprite_new(pine_tree_texture);
-    pine_tree_sprite.pos.x = 64.f;
-    pine_tree_sprite.pos.y = 18.f;
+    pine_tree_sprite.pos.x = 90.f;
+    pine_tree_sprite.pos.y = 36.f;
 
     sprite cat_sprite = sprite_new(cat_texture);
     cat_sprite.texture_rect = (SDL_Rect) { 0, 0, 18, 18 };
-    cat_sprite.pos.x = 64.f;
+    cat_sprite.pos.x = 70.f;
     cat_sprite.pos.y = 90.f;
+
+    tile_map map;
+    tile_map_load(&map, "res/tile_maps/tile_map.txt", renderer);
 
     _Bool is_running = true;
     SDL_Event event;
@@ -69,12 +73,15 @@ int main(int argc, char *argv[])
 
         SDL_RenderClear(renderer);
 
-        draw_sprite(renderer, &tree_sprite);
-        draw_sprite(renderer, &pine_tree_sprite);
-        draw_sprite(renderer, &cat_sprite);
+        tile_map_draw(renderer, &map);
+        sprite_draw(renderer, &tree_sprite);
+        sprite_draw(renderer, &pine_tree_sprite);
+        sprite_draw(renderer, &cat_sprite);
 
         SDL_RenderPresent(renderer);
     }
+
+    tile_map_free(&map);
 
     SDL_DestroyTexture(tree_texture);
     SDL_DestroyTexture(pine_tree_texture);

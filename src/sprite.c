@@ -15,7 +15,7 @@ sprite sprite_new(SDL_Texture *texture)
     return s;
 }
 
-void draw_sprite(SDL_Renderer *renderer, const sprite *sprite)
+void sprite_draw(SDL_Renderer *renderer, const sprite *sprite)
 {
     SDL_Rect dest_rect;
     dest_rect.x = floor(sprite->pos.x);
