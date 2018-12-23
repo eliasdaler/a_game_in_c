@@ -7,9 +7,12 @@
 
 #include <stdbool.h>
 
+#include "hash_table_test.h"
 
 int main(int argc, char *argv[])
 {
+    hash_table_test();
+
     SDL_Init(SDL_INIT_VIDEO);
 
     // init SDL_image

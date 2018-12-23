@@ -7,10 +7,14 @@ project(a_game_in_c
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 add_executable(game
+    src/hash_table.c
     src/main.c
     src/sdl_util.c
     src/sprite.c
     src/tile_map.c
+
+    # tests
+    src/hash_table_test.c
 )
 
 set_property(TARGET game PROPERTY C_STANDARD 99)
