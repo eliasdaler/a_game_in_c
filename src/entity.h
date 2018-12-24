@@ -5,9 +5,11 @@
 
 struct SDL_Renderer;
 
+typedef size_t entity_id;
 typedef struct entity {
     vec2f position;
     sprite sprite;
+    entity_id id;
 } entity;
 
 void entity_set_position(entity *e, vec2f position);

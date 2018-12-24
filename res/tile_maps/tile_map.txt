@@ -1,6 +1,6 @@
 nature
 ENTITIES_BEGIN
-prefab=cat,x=70,y=90,prefab=cat
+prefab=cat,x=70,y=90,prefab=cat,tag=player
 prefab=tree,x=0,y=-16,prefab=tree
 prefab=tree,x=28,y=16,prefab=pine_tree
 prefab=tree,x=128,y=-16,prefab=tree

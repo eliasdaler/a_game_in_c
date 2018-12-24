@@ -112,6 +112,11 @@ _Bool tile_map_load(tile_map *map, const char *path,
             entity *e = entity_manager_create_entity(em, prefab_name);
             entity_set_position(e, pos);
 
+            const char* tag = hash_table_get(properties, "tag");
+            if (tag) {
+                entity_manager_set_entity_tag(em, e, tag);
+            }
+
             hash_table_free(properties);
         } else {
             static const char* fmt = "Line '%s' doesn't match format 'x=...,y=...,prefab=%s'";

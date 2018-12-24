@@ -8,6 +8,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include <assert.h>
 #include <stdbool.h>
 
 #include "hash_table_test.h"
@@ -58,6 +59,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    entity* player = entity_manager_get_entity_by_tag(&entity_manager, "player");
+    assert(player);
+
     _Bool is_running = true;
     SDL_Event event;
 
@@ -72,9 +76,12 @@ int main(int argc, char *argv[])
 
         tile_map_draw(renderer, &map);
 
+        // for now we'll assume that entities mostly lay close to each other
         for(entity_id id = 0; id < entity_manager.last_id; ++id) {
             entity *e = entity_manager_get_entity(&entity_manager, id);
-            entity_draw(renderer, e);
+            if (e) {
+                entity_draw(renderer, e);
+            }
         }
 
         SDL_RenderPresent(renderer);
