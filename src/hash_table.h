@@ -9,8 +9,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef uint32_t (*hasher_func_ptr)(void *obj);
-typedef _Bool (*hash_table_compare_func_ptr)(void *a, void *b);
+typedef uint32_t (*hasher_func_ptr)(const void *obj);
+typedef _Bool (*hash_table_compare_func_ptr)(const void *a, const void *b);
+typedef void (*hash_table_deleter_func_ptr)(void *obj);
 
 typedef struct hash_table_entry {
     uint32_t hash;
@@ -24,6 +25,8 @@ typedef struct hash_table {
     int entry_count;
     hasher_func_ptr hasher;
     hash_table_compare_func_ptr compare_func;
+    hash_table_deleter_func_ptr key_deleter_func;
+    hash_table_deleter_func_ptr value_deleter_func;
 } hash_table;
 
 hash_table *hash_table_new(hasher_func_ptr hasher,
@@ -31,8 +34,9 @@ hash_table *hash_table_new(hasher_func_ptr hasher,
 hash_table *strkey_hash_table_new();
 
 void hash_table_set(hash_table *ht, void *key, void *value);
-void *hash_table_get(hash_table *ht, void *key);
+void *hash_table_get(hash_table *ht, const void *key);
 
-void hash_table_remove(hash_table *ht, void *key);
+void hash_table_remove(hash_table *ht, const void *key);
+void hash_table_remove_all(hash_table *ht);
 
 void hash_table_free(hash_table *ht);
