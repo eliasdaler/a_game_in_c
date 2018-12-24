@@ -94,5 +94,28 @@ void hash_table_test()
 
     hash_table_free(ht);
 
+
+    // test hash_table with ints
+    hash_table* ht2 = hash_table_new(sizeof(int));
+
+    hash_table_set(ht2, copy_int(0), copy_int(42));
+    hash_table_set(ht2, copy_int(42), copy_int(-52));
+    hash_table_set(ht2, copy_int(-32), copy_int(0));
+    hash_table_set(ht2, copy_int(190), copy_int(1337));
+
+    assert(ht2->entry_count == 4);
+
+    // check for existing key
+    int test_number = 42;
+    val = hash_table_get(ht2, &test_number);
+    assert(val && *val == -52);
+
+    // check for non-existing key
+    test_number = 1;
+    val = hash_table_get(ht2, &test_number);
+    assert(!val);
+
+    hash_table_free(ht);
+
     printf("All hash table tests passed!\n");
 }
