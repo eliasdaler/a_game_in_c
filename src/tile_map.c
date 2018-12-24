@@ -111,7 +111,7 @@ void tile_map_draw(SDL_Renderer *renderer, const tile_map *map)
         for (int x = 0; x < w; ++x) {
             tile id = map->tiles[y][x];
             s.texture_rect = get_tile_texture_rect(id, tiles_x);
-            s.pos = (vec2f) { x * TILE_SIZE, y * TILE_SIZE };
+            s.position = (vec2f) { x * TILE_SIZE, y * TILE_SIZE };
 
             sprite_draw(renderer, &s);
         }

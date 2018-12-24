@@ -1,4 +1,5 @@
 #include "sdl_util.h"
+#include "entity.h"
 #include "sprite.h"
 #include "tile_map.h"
 
@@ -48,18 +49,18 @@ int main(int argc, char *argv[])
     SDL_Texture *pine_tree_texture = load_texture(renderer, "res/images/pine_tree.png");
     SDL_Texture *cat_texture = load_texture(renderer, "res/images/cat.png");
 
-    sprite tree_sprite = sprite_new(tree_texture);
-    tree_sprite.pos.x = 32.f;
-    tree_sprite.pos.y = 64.f;
+    entity tree;
+    tree.sprite = sprite_new(tree_texture);
+    entity_set_position(&tree, (vec2f) { 32.f, 64.f } );
 
-    sprite pine_tree_sprite = sprite_new(pine_tree_texture);
-    pine_tree_sprite.pos.x = 90.f;
-    pine_tree_sprite.pos.y = 36.f;
+    entity pine_tree;
+    pine_tree.sprite = sprite_new(pine_tree_texture);
+    entity_set_position(&pine_tree, (vec2f) { 90.f, 36.f } );
 
-    sprite cat_sprite = sprite_new(cat_texture);
-    cat_sprite.texture_rect = (SDL_Rect) { 0, 0, 18, 18 };
-    cat_sprite.pos.x = 70.f;
-    cat_sprite.pos.y = 90.f;
+    entity cat;
+    cat.sprite = sprite_new(cat_texture);
+    entity_set_position(&cat, (vec2f) { 70.f, 90.f } );
+    cat.sprite.texture_rect = (SDL_Rect) { 0, 0, 18, 18 };
 
     tile_map map;
     tile_map_load(&map, "res/tile_maps/tile_map.txt", renderer);
@@ -77,9 +78,9 @@ int main(int argc, char *argv[])
         SDL_RenderClear(renderer);
 
         tile_map_draw(renderer, &map);
-        sprite_draw(renderer, &tree_sprite);
-        sprite_draw(renderer, &pine_tree_sprite);
-        sprite_draw(renderer, &cat_sprite);
+        entity_draw(renderer, &tree);
+        entity_draw(renderer, &pine_tree);
+        entity_draw(renderer, &cat);
 
         SDL_RenderPresent(renderer);
     }

@@ -18,8 +18,8 @@ sprite sprite_new(SDL_Texture *texture)
 void sprite_draw(SDL_Renderer *renderer, const sprite *sprite)
 {
     SDL_Rect dest_rect;
-    dest_rect.x = floor(sprite->pos.x);
-    dest_rect.y = floor(sprite->pos.y);
+    dest_rect.x = floor(sprite->position.x);
+    dest_rect.y = floor(sprite->position.y);
     dest_rect.w = sprite->texture_rect.w;
     dest_rect.h = sprite->texture_rect.h;
 

@@ -8,7 +8,7 @@ struct SDL_Texture;
 struct SDL_Renderer;
 
 typedef struct sprite {
-    vec2f pos;
+    vec2f position;
     struct SDL_Texture *texture;
     struct SDL_Rect texture_rect;
 } sprite;

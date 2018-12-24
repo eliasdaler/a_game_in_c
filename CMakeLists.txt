@@ -7,6 +7,7 @@ project(a_game_in_c
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 add_executable(game
+    src/entity.c
     src/hash_table.c
     src/main.c
     src/sdl_util.c
