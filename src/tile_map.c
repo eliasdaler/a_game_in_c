@@ -1,5 +1,6 @@
 #include "tile_map.h"
 
+#include "hash_table.h"
 #include "entity_manager.h"
 #include "resource_manager.h"
 
@@ -30,6 +31,25 @@ static char* create_error_string_not_maching_format(const char *line, const char
     char *str = malloc(str_size + 1);
     snprintf(str, str_size, fmt, line);
     return str;
+}
+
+static hash_table *read_line_kv(const char *str)
+{
+    hash_table *ht = strkey_hash_table_new();
+
+    char key_buf[64];
+    char value_buf[64];
+
+    char *str_copy = copy_string(str);
+    char *token = strtok(str_copy, ",");
+    while (token) {
+        sscanf(token, "%[^=]=%s", key_buf, value_buf);
+        hash_table_set(ht, copy_string(key_buf), copy_string(value_buf));
+        token = strtok(NULL, ",");
+    }
+    free(str_copy);
+
+    return ht;
 }
 
 _Bool tile_map_load(tile_map *map, const char *path,
@@ -69,7 +89,6 @@ _Bool tile_map_load(tile_map *map, const char *path,
         goto error;
     }
 
-    char prefab_name[255];
     for (;;) {
         if (!read_line(file, line, LINE_BUFFER_SIZE, &line_number)) {
             error_reason = "EOF reached before finding ENTITIES_END token";
@@ -80,17 +99,27 @@ _Bool tile_map_load(tile_map *map, const char *path,
             break;
         }
 
-        vec2f pos;
-        if (!sscanf(line, "x=%f,y=%f,prefab=%s", &pos.x, &pos.y, prefab_name)) {
+        hash_table* properties = read_line_kv(line);
+        const char* prefab_name = hash_table_get(properties, "prefab");
+        const char* pos_x_str = hash_table_get(properties, "x");
+        const char* pos_y_str = hash_table_get(properties, "y");
+
+        if(prefab_name && pos_x_str && pos_y_str) {
+            vec2f pos;
+            pos.x = atof(pos_x_str);
+            pos.y = atof(pos_y_str);
+
+            entity *e = entity_manager_create_entity(em, prefab_name);
+            entity_set_position(e, pos);
+
+            hash_table_free(properties);
+        } else {
             static const char* fmt = "Line '%s' doesn't match format 'x=...,y=...,prefab=%s'";
             error_reason = create_error_string_not_maching_format(line, fmt);
             remove_error_reason_str = true;
+            hash_table_free(properties);
             goto error;
         }
-
-
-        entity *e = entity_manager_create_entity(em, prefab_name);
-        entity_set_position(e, pos);
     }
 
     // read tilemap size

@@ -72,13 +72,10 @@ int main(int argc, char *argv[])
 
         tile_map_draw(renderer, &map);
 
-        entity *e0 = entity_manager_get_entity(&entity_manager, 0);
-        entity *e1 = entity_manager_get_entity(&entity_manager, 1);
-        entity *e2 = entity_manager_get_entity(&entity_manager, 2);
-
-        entity_draw(renderer, e0);
-        entity_draw(renderer, e1);
-        entity_draw(renderer, e2);
+        for(entity_id id = 0; id < entity_manager.last_id; ++id) {
+            entity *e = entity_manager_get_entity(&entity_manager, id);
+            entity_draw(renderer, e);
+        }
 
         SDL_RenderPresent(renderer);
     }

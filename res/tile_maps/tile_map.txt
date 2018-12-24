@@ -1,8 +1,14 @@
 nature
 ENTITIES_BEGIN
-x=32,y=64,prefab=tree
-x=90,y=36,prefab=pine_tree
-x=70,y=90,prefab=cat
+prefab=cat,x=70,y=90,prefab=cat
+prefab=tree,x=0,y=-16,prefab=tree
+prefab=tree,x=28,y=16,prefab=pine_tree
+prefab=tree,x=128,y=-16,prefab=tree
+prefab=tree,x=32,y=64,prefab=tree
+prefab=tree,x=32,y=64,prefab=tree
+prefab=pine_tree,x=-8,y=52,prefab=pine_tree
+prefab=pine_tree,x=100,y=48,prefab=pine_tree
+prefab=pine_tree,x=120,y=90,prefab=pine_tree
 ENTITIES_END
 map_size=10,9
 2,0,0,0,1,10,0,0,3,0

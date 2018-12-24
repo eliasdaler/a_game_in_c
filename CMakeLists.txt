@@ -42,7 +42,13 @@ target_link_libraries(game
     ${SDL2_IMAGE_LIBRARIES}
 )
 
-# Copy resources
+set(GAME_RES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/res)
+
+# Add symlink to res folder to not copy it all the time during build
+add_custom_command(TARGET game POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E create_symlink
+  "${GAME_RES_DIR}" "$<TARGET_FILE_DIR:game>/res"
+)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # install rules
@@ -50,5 +56,5 @@ set(GAME_INSTALL_FOLDER "a_game_in_c")
 install(TARGETS game
   RUNTIME DESTINATION ${GAME_INSTALL_FOLDER})
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/res
+install(DIRECTORY ${GAME_RES_DIR}
   DESTINATION ${GAME_INSTALL_FOLDER})

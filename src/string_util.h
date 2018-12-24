@@ -1,4 +1,4 @@
 #pragma once
 
-char* copy_string(char* other);
+char* copy_string(const char* other);
 void remove_ending_newline(char* str);
