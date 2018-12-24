@@ -1,5 +1,10 @@
 nature
-10,9
+ENTITIES_BEGIN
+x=32,y=64,prefab=tree
+x=90,y=36,prefab=pine_tree
+x=70,y=90,prefab=cat
+ENTITIES_END
+map_size=10,9
 2,0,0,0,1,10,0,0,3,0
 0,2,0,0,1,10,3,0,0,0
 0,0,0,0,1,10,0,0,7,0

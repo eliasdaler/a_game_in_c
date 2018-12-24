@@ -1,31 +1,54 @@
 #include "tile_map.h"
 
+#include "entity_manager.h"
 #include "resource_manager.h"
+
 #include "sdl_util.h"
 #include "sprite.h"
+#include "string_util.h"
 
 #include <errno.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
 #include <SDL_render.h>
 
-void tile_map_load(tile_map *map, const char *path,
-                   struct resource_manager *rm)
+static _Bool read_line(FILE *file, char *line, int buffer_size, int *line_number)
+{
+    _Bool ok = fgets(line, buffer_size, file);
+    if (ok) {
+        ++(*line_number);
+        remove_ending_newline(line);
+    }
+    return ok;
+}
+
+static char* create_error_string_not_maching_format(const char *line, const char *fmt)
+{
+    size_t str_size = strlen(fmt) + strlen(line) - 2; // 2 because of "%s"
+    char *str = malloc(str_size + 1);
+    snprintf(str, str_size, fmt, line);
+    return str;
+}
+
+_Bool tile_map_load(tile_map *map, const char *path,
+                    struct entity_manager *em,
+                    struct resource_manager *rm)
 {
     FILE *file = fopen(path, "r");
     if (!file) {
         fprintf(stderr, "Error loading tile map from %s: %s\n", path, strerror(errno));
-        return;
+        return false;
     }
 
-    char *error_reason;
+    char *error_reason = "unknown error";
+    _Bool remove_error_reason_str = false; // if allocated string - remove it in the end
+    int line_number = 0;
 
-    char line[255];
-    if (fgets(line, 255, file)) {
-        // remove newline
-        line[strcspn(line, "\n")] = 0;
-
+#define LINE_BUFFER_SIZE 255
+    char line[LINE_BUFFER_SIZE];
+    if (read_line(file, line, LINE_BUFFER_SIZE, &line_number)) {
         map->tileset_texture = resource_manager_get_texture(rm, line);
         if (!map->tileset_texture) {
             error_reason = "Can't load tileset texture";
@@ -36,11 +59,50 @@ void tile_map_load(tile_map *map, const char *path,
         goto error;
     }
 
+    if (!read_line(file, line, LINE_BUFFER_SIZE, &line_number)) {
+        error_reason = "EOF reached before finding ENTITIES_BEGIN token";
+        goto error;
+    }
+
+    if (strcmp(line, "ENTITIES_BEGIN")) {
+        error_reason = "Expected ENTITIES_BEGIN token after texture filename";
+        goto error;
+    }
+
+    char prefab_name[255];
+    for (;;) {
+        if (!read_line(file, line, LINE_BUFFER_SIZE, &line_number)) {
+            error_reason = "EOF reached before finding ENTITIES_END token";
+            goto error;
+        }
+
+        if(strcmp(line, "ENTITIES_END") == 0) {
+            break;
+        }
+
+        vec2f pos;
+        if (!sscanf(line, "x=%f,y=%f,prefab=%s", &pos.x, &pos.y, prefab_name)) {
+            static const char* fmt = "Line '%s' doesn't match format 'x=...,y=...,prefab=%s'";
+            error_reason = create_error_string_not_maching_format(line, fmt);
+            remove_error_reason_str = true;
+            goto error;
+        }
+
+
+        entity *e = entity_manager_create_entity(em, prefab_name);
+        entity_set_position(e, pos);
+    }
+
     // read tilemap size
-    if (fgets(line, 255, file)) {
-        sscanf(line, "%d,%d", &map->size.x, &map->size.y);
+    if (read_line(file, line, LINE_BUFFER_SIZE, &line_number)) {
+        if (!sscanf(line, "map_size=%d,%d", &map->size.x, &map->size.y)) {
+            static const char* fmt = "Line '%s' doesn't match format 'map_size=<x>,<y>'";
+            error_reason = create_error_string_not_maching_format(line, fmt);
+            remove_error_reason_str = true;
+            goto error;
+        }
     } else {
-        error_reason = "Can't read map size";
+        error_reason = "EOF reached before could read map size";
         goto error;
     }
 
@@ -55,12 +117,10 @@ void tile_map_load(tile_map *map, const char *path,
 
     // read tiles
     for (int y = 0; y < h; ++y) {
-        if (!fgets(line, 255, file)) {
+        if (!read_line(file, line, LINE_BUFFER_SIZE, &line_number)) {
+            error_reason = "Not enough tile lines";
             goto error;
         }
-
-        // remove newline
-        line[strcspn(line, "\n")] = 0;
 
         char *token = strtok(line, ",");
         int x = 0;
@@ -82,11 +142,15 @@ void tile_map_load(tile_map *map, const char *path,
         }
     }
 
-    return;
+    return true;
 
 error:
-    fprintf(stderr, "Error loading tile map from %s: %s\n", path, error_reason);
+    fprintf(stderr, "Error loading tile map from '%s', line %d: %s\n", path, line_number, error_reason);
+    if (remove_error_reason_str) {
+        free(error_reason);
+    }
     fclose(file);
+    return false;
 }
 
 static const int TILE_SIZE = 16;

@@ -9,6 +9,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 add_executable(game
     src/entity.c
     src/entity_factory.c
+    src/entity_manager.c
     src/hash_table.c
     src/main.c
     src/resource_manager.c

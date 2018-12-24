@@ -1,6 +1,6 @@
 #include "sdl_util.h"
 #include "entity.h"
-#include "entity_factory.h"
+#include "entity_manager.h"
 #include "resource_manager.h"
 #include "sprite.h"
 #include "tile_map.h"
@@ -50,20 +50,13 @@ int main(int argc, char *argv[])
     resource_manager resource_manager;
     resource_manager_init(&resource_manager, renderer);
 
-    entity_factory entity_factory;
-    entity_factory_init(&entity_factory, &resource_manager);
-
-    entity tree = entity_factory_create_entity(&entity_factory, "tree");
-    entity_set_position(&tree, (vec2f) { 32.f, 64.f } );
-
-    entity pine_tree = entity_factory_create_entity(&entity_factory, "pine_tree");
-    entity_set_position(&pine_tree, (vec2f) { 90.f, 36.f } );
-
-    entity cat = entity_factory_create_entity(&entity_factory, "cat");
-    entity_set_position(&cat, (vec2f) { 70.f, 90.f } );
+    entity_manager entity_manager;
+    entity_manager_init(&entity_manager, &resource_manager);
 
     tile_map map;
-    tile_map_load(&map, "res/tile_maps/tile_map.txt", &resource_manager);
+    if (!tile_map_load(&map, "res/tile_maps/tile_map.txt", &entity_manager, &resource_manager)) {
+        return 1;
+    }
 
     _Bool is_running = true;
     SDL_Event event;
@@ -78,17 +71,22 @@ int main(int argc, char *argv[])
         SDL_RenderClear(renderer);
 
         tile_map_draw(renderer, &map);
-        entity_draw(renderer, &tree);
-        entity_draw(renderer, &pine_tree);
-        entity_draw(renderer, &cat);
+
+        entity *e0 = entity_manager_get_entity(&entity_manager, 0);
+        entity *e1 = entity_manager_get_entity(&entity_manager, 1);
+        entity *e2 = entity_manager_get_entity(&entity_manager, 2);
+
+        entity_draw(renderer, e0);
+        entity_draw(renderer, e1);
+        entity_draw(renderer, e2);
 
         SDL_RenderPresent(renderer);
     }
 
     tile_map_free(&map);
 
+    entity_manager_free(&entity_manager);
     resource_manager_free(&resource_manager);
-    entity_factory_free(&entity_factory);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

@@ -9,3 +9,9 @@ char* copy_string(char* other)
     strcpy(result, other);
     return result;
 }
+
+void remove_ending_newline(char* str)
+{
+    str[strcspn(str, "\n")] = 0;
+}
+
