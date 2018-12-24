@@ -14,4 +14,5 @@ typedef struct sprite {
 } sprite;
 
 sprite sprite_new(struct SDL_Texture *texture);
+
 void sprite_draw(struct SDL_Renderer *renderer, const sprite *sprite);

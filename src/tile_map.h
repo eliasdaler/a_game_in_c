@@ -7,6 +7,8 @@
 struct SDL_Texture;
 struct SDL_Renderer;
 
+struct resource_manager;
+
 typedef int tile;
 
 typedef struct tile_map {
@@ -16,7 +18,7 @@ typedef struct tile_map {
 } tile_map;
 
 void tile_map_load(tile_map *map, const char *path,
-                   struct SDL_Renderer *renderer);
+                   struct resource_manager *rm);
 
 void tile_map_draw(struct SDL_Renderer *renderer, const tile_map *map);
 void tile_map_free(tile_map *map);

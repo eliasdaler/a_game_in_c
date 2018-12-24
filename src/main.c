@@ -1,5 +1,7 @@
 #include "sdl_util.h"
 #include "entity.h"
+#include "entity_factory.h"
+#include "resource_manager.h"
 #include "sprite.h"
 #include "tile_map.h"
 
@@ -45,25 +47,23 @@ int main(int argc, char *argv[])
     SDL_RenderSetScale(renderer, 3.0f, 3.0f);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
-    SDL_Texture *tree_texture = load_texture(renderer, "res/images/tree.png");
-    SDL_Texture *pine_tree_texture = load_texture(renderer, "res/images/pine_tree.png");
-    SDL_Texture *cat_texture = load_texture(renderer, "res/images/cat.png");
+    resource_manager resource_manager;
+    resource_manager_init(&resource_manager, renderer);
 
-    entity tree;
-    tree.sprite = sprite_new(tree_texture);
+    entity_factory entity_factory;
+    entity_factory_init(&entity_factory, &resource_manager);
+
+    entity tree = entity_factory_create_entity(&entity_factory, "tree");
     entity_set_position(&tree, (vec2f) { 32.f, 64.f } );
 
-    entity pine_tree;
-    pine_tree.sprite = sprite_new(pine_tree_texture);
+    entity pine_tree = entity_factory_create_entity(&entity_factory, "pine_tree");
     entity_set_position(&pine_tree, (vec2f) { 90.f, 36.f } );
 
-    entity cat;
-    cat.sprite = sprite_new(cat_texture);
+    entity cat = entity_factory_create_entity(&entity_factory, "cat");
     entity_set_position(&cat, (vec2f) { 70.f, 90.f } );
-    cat.sprite.texture_rect = (SDL_Rect) { 0, 0, 18, 18 };
 
     tile_map map;
-    tile_map_load(&map, "res/tile_maps/tile_map.txt", renderer);
+    tile_map_load(&map, "res/tile_maps/tile_map.txt", &resource_manager);
 
     _Bool is_running = true;
     SDL_Event event;
@@ -87,9 +87,8 @@ int main(int argc, char *argv[])
 
     tile_map_free(&map);
 
-    SDL_DestroyTexture(tree_texture);
-    SDL_DestroyTexture(pine_tree_texture);
-    SDL_DestroyTexture(cat_texture);
+    resource_manager_free(&resource_manager);
+    entity_factory_free(&entity_factory);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

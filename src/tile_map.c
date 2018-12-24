@@ -1,4 +1,6 @@
 #include "tile_map.h"
+
+#include "resource_manager.h"
 #include "sdl_util.h"
 #include "sprite.h"
 
@@ -8,7 +10,8 @@
 
 #include <SDL_render.h>
 
-void tile_map_load(tile_map *map, const char *path, SDL_Renderer *renderer)
+void tile_map_load(tile_map *map, const char *path,
+                   struct resource_manager *rm)
 {
     FILE *file = fopen(path, "r");
     if (!file) {
@@ -23,7 +26,7 @@ void tile_map_load(tile_map *map, const char *path, SDL_Renderer *renderer)
         // remove newline
         line[strcspn(line, "\n")] = 0;
 
-        map->tileset_texture = load_texture(renderer, line);
+        map->tileset_texture = resource_manager_get_texture(rm, line);
         if (!map->tileset_texture) {
             error_reason = "Can't load tileset texture";
             goto error;
@@ -126,6 +129,4 @@ void tile_map_free(tile_map *map)
     }
 
     free(map->tiles);
-
-    SDL_DestroyTexture(map->tileset_texture);
 }
