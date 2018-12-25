@@ -199,7 +199,7 @@ static SDL_Rect get_tile_texture_rect(int id, int tiles_x)
     return r;
 }
 
-void tile_map_draw(SDL_Renderer *renderer, const tile_map *map)
+void tile_map_draw(const tile_map *map, struct SDL_Renderer *renderer)
 {
     const int w = map->size.x;
     const int h = map->size.y;
@@ -214,7 +214,7 @@ void tile_map_draw(SDL_Renderer *renderer, const tile_map *map)
             s.texture_rect = get_tile_texture_rect(id, tiles_x);
             s.position = (vec2f) { x * TILE_SIZE, y * TILE_SIZE };
 
-            sprite_draw(renderer, &s);
+            sprite_draw(&s, renderer);
         }
     }
 }

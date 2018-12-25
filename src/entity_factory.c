@@ -19,19 +19,23 @@ void entity_factory_init(entity_factory *factory, resource_manager *rm)
 
     // TODO: load prefabs from Lua
     entity tree;
+    entity_init(&tree);
     struct SDL_Texture *tree_texture = resource_manager_get_texture(rm, "tree");
     tree.sprite = sprite_new(tree_texture);
     add_prefab(factory, "tree", tree);
 
     entity pine_tree;
+    entity_init(&pine_tree);
     struct SDL_Texture *pine_tree_texture = resource_manager_get_texture(rm, "pine_tree");
     pine_tree.sprite = sprite_new(pine_tree_texture);
     add_prefab(factory, "pine_tree", pine_tree);
 
     entity cat;
+    entity_init(&cat);
     struct SDL_Texture *cat_texture = resource_manager_get_texture(rm, "cat");
     cat.sprite = sprite_new(cat_texture);
     cat.sprite.texture_rect = (SDL_Rect) { 0, 0, 18, 18 };
+    cat.max_speed = (vec2f) { 30.f, 30.f };
     add_prefab(factory, "cat", cat);
 }
 

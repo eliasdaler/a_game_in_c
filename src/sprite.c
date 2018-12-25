@@ -15,10 +15,10 @@ sprite sprite_new(SDL_Texture *texture)
     return s;
 }
 
-void sprite_draw(SDL_Renderer *renderer, const sprite *sprite)
+void sprite_draw(const sprite *sprite, struct SDL_Renderer *renderer)
 {
     SDL_Rect dest_rect;
-    dest_rect.x = floor(sprite->position.x);
+    dest_rect.x = (sprite->position.x);
     dest_rect.y = floor(sprite->position.y);
     dest_rect.w = sprite->texture_rect.w;
     dest_rect.h = sprite->texture_rect.h;

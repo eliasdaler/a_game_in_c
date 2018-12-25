@@ -22,5 +22,5 @@ typedef struct tile_map {
 _Bool tile_map_load(tile_map *map, const char *path, struct entity_manager *em,
                     struct resource_manager *rm);
 
-void tile_map_draw(struct SDL_Renderer *renderer, const tile_map *map);
+void tile_map_draw(const tile_map *map, struct SDL_Renderer *renderer);
 void tile_map_free(tile_map *map);
