@@ -2,7 +2,7 @@
 #include "sdl_util.h"
 
 #include <SDL_render.h>
-#include <math.h>
+#include <tgmath.h>
 
 sprite sprite_new(SDL_Texture *texture)
 {
@@ -18,8 +18,8 @@ sprite sprite_new(SDL_Texture *texture)
 void sprite_draw(const sprite *sprite, struct SDL_Renderer *renderer)
 {
     SDL_Rect dest_rect;
-    dest_rect.x = (sprite->position.x);
-    dest_rect.y = floor(sprite->position.y);
+    dest_rect.x = floorf(sprite->position.x);
+    dest_rect.y = floorf(sprite->position.y);
     dest_rect.w = sprite->texture_rect.w;
     dest_rect.h = sprite->texture_rect.h;
 
