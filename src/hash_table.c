@@ -35,12 +35,12 @@ static uint32_t default_hash(const void *obj, size_t key_size)
     return fnv_1a_hash(obj, key_size);
 }
 
-static _Bool default_compare(const void *obj1, const void *obj2, size_t key_size)
+static bool default_compare(const void *obj1, const void *obj2, size_t key_size)
 {
     return memcmp(obj1, obj2, key_size) == 0;
 }
 
-static _Bool string_compare(const void *str1, const void *str2, size_t key_size)
+static bool string_compare(const void *str1, const void *str2, size_t key_size)
 {
     return strcmp((const char*)str1, (const char*)str2) == 0;
 }
@@ -96,12 +96,12 @@ hash_table* strkey_hash_table_new()
     return hash_table_new_custom(string_hash, string_compare);
 }
 
-static _Bool is_empty_entry(hash_table_entry* entry)
+static bool is_empty_entry(hash_table_entry* entry)
 {
     return entry->hash == 0 && entry->key == NULL;
 }
 
-static _Bool is_tombstone_entry(hash_table_entry* entry)
+static bool is_tombstone_entry(hash_table_entry* entry)
 {
     return entry->hash == TOMBSTONE_HASH && entry->key == NULL;
 }
@@ -142,7 +142,7 @@ static hash_table_entry* find_entry(hash_table *ht, const void *key)
     }
 }
 
-static _Bool hash_table_needs_readjustment(hash_table *ht)
+static bool hash_table_needs_readjustment(hash_table *ht)
 {
     return ht->entry_count + 1 > ht->capacity * LOAD_FACTOR;
 }

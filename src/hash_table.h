@@ -11,7 +11,7 @@
 #include <stddef.h>
 
 typedef uint32_t (*hasher_func_ptr)(const void *obj, size_t key_size);
-typedef _Bool (*hash_table_compare_func_ptr)(const void *a, const void *b, size_t key_size);
+typedef bool (*hash_table_compare_func_ptr)(const void *a, const void *b, size_t key_size);
 typedef void (*hash_table_deleter_func_ptr)(void *obj);
 
 typedef struct hash_table_entry {

@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     player->velocity.x = 30.f;
     assert(player);
 
-    _Bool is_running = true;
+    bool is_running = true;
     SDL_Event event;
 
     // Fix your timestep! game loop

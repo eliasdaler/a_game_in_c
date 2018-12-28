@@ -19,7 +19,7 @@ typedef struct tile_map {
     struct SDL_Texture *tileset_texture;
 } tile_map;
 
-_Bool tile_map_load(tile_map *map, const char *path, struct entity_manager *em,
+bool tile_map_load(tile_map *map, const char *path, struct entity_manager *em,
                     struct resource_manager *rm);
 
 void tile_map_draw(const tile_map *map, struct SDL_Renderer *renderer);

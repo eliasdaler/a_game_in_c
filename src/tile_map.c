@@ -15,9 +15,9 @@
 
 #include <SDL_render.h>
 
-static _Bool read_line(FILE *file, char *line, int buffer_size, int *line_number)
+static bool read_line(FILE *file, char *line, int buffer_size, int *line_number)
 {
-    _Bool ok = fgets(line, buffer_size, file);
+    bool ok = fgets(line, buffer_size, file);
     if (ok) {
         ++(*line_number);
         remove_ending_newline(line);
@@ -52,7 +52,7 @@ static hash_table *read_line_kv(const char *str)
     return ht;
 }
 
-_Bool tile_map_load(tile_map *map, const char *path,
+bool tile_map_load(tile_map *map, const char *path,
                     struct entity_manager *em,
                     struct resource_manager *rm)
 {
@@ -63,7 +63,7 @@ _Bool tile_map_load(tile_map *map, const char *path,
     }
 
     char *error_reason = "unknown error";
-    _Bool remove_error_reason_str = false; // if allocated string - remove it in the end
+    bool remove_error_reason_str = false; // if allocated string - remove it in the end
     int line_number = 0;
 
 #define LINE_BUFFER_SIZE 255
