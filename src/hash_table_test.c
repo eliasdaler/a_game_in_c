@@ -36,7 +36,7 @@ static void check_value(hash_table* ht, char* key, int expected)
     assert(val && *val == expected);
 }
 
-void hash_table_test()
+void hash_table_test(void)
 {
     int *val;
 

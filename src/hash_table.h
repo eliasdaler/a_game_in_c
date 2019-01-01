@@ -36,7 +36,7 @@ hash_table *hash_table_new_custom(hasher_func_ptr hasher,
 
 // create a hash map with keys which can be compared via memcmp (
 hash_table *hash_table_new(size_t key_size);
-hash_table *strkey_hash_table_new();
+hash_table *strkey_hash_table_new(void);
 
 void hash_table_set(hash_table *ht, void *key, void *value);
 void *hash_table_get(hash_table *ht, const void *key);

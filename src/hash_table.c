@@ -91,7 +91,7 @@ hash_table *hash_table_new(size_t key_size)
     return ht;
 }
 
-hash_table* strkey_hash_table_new()
+hash_table* strkey_hash_table_new(void)
 {
     return hash_table_new_custom(string_hash, string_compare);
 }
