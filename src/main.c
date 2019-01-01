@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     int imgFlags = IMG_INIT_PNG;
     if(!(IMG_Init(imgFlags) & imgFlags)) {
         printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-        return 1;
+        return EXIT_FAILURE;
     }
 
     SDL_Window *window = SDL_CreateWindow(
@@ -36,14 +36,14 @@ int main(int argc, char *argv[])
 
     if (!window) {
         printf("Couldn't create window! SDL Error: %s\n", SDL_GetError());
-        return 1;
+        return EXIT_FAILURE;
     }
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1,
             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer) {
         printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-        return 1;
+        return EXIT_FAILURE;
     }
 
     SDL_RenderSetScale(renderer, 3.0f, 3.0f);
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
     tile_map map;
     if (!tile_map_load(&map, "res/tile_maps/tile_map.txt", &entity_manager, &resource_manager)) {
-        return 1;
+        return EXIT_FAILURE;
     }
 
     entity* player = entity_manager_get_entity_by_tag(&entity_manager, "player");
@@ -149,5 +149,5 @@ int main(int argc, char *argv[])
     IMG_Quit();
     SDL_Quit();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
