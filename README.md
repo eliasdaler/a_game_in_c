@@ -1,4 +1,6 @@
-a_game_in_c - a simple game in plain C I'm making for fun and education
+a_game_in_c - a simple game in plain C I'm making for fun and education.
+
+Abandoned at the moment, but provides a nice start for making SDL games.
 
 # Dependencies
 * SDL2
